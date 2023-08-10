@@ -1,13 +1,31 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-
 type Data = {
-  name: string
-}
+  messages: string;
+};
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: 'John Doe' })
+export async function mongoDataApiRequest(action: String, options: Object) {
+  const result = await fetch(
+    `https://ap-south-1.aws.data.mongodb-api.com/app/data-uyssn/endpoint/data/v1/action/${action}`,
+
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+
+        "api-key":
+          "CBmUJvvBImZhxaOhZbKY09qIBqJUxHZeq2NoQRSo6HKt7vjqqkmnDpA8Dr6ZIKFr",
+      },
+
+      body: JSON.stringify({
+        dataSource: "Cluster0",
+
+        database: "Message",
+
+        collection: "messages",
+
+        ...options,
+      }),
+    }
+  ).then((res) => res.json());
+  return result;
 }
